@@ -4,6 +4,9 @@ class Contact < ApplicationRecord
   validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
   validates :first_name, presence: true
   validates :last_name, presence: true
+
+  belongs_to :user
+
   def friendly_created_at
     created_at.strftime("%B %e, %Y")
   end
@@ -22,6 +25,7 @@ class Contact < ApplicationRecord
 
   def as_json
     {
+      user_id: user_id,
       id: id,
       first_name: first_name,
       middle_name: middle_name,

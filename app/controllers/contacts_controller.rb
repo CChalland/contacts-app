@@ -16,6 +16,9 @@ class ContactsController < ApplicationController
    
     elsif params[:search_email]
       contacts = contacts.where("email ILIKE ?", "%#{params[:search_email]}%")
+
+    elsif params[:user_id]
+      contacts = contacts.where("user_id = ?", params[:user_id]) 
     end
     render json: contacts.as_json
   end
@@ -27,7 +30,8 @@ class ContactsController < ApplicationController
       middle_name: params[:middle_name],
       phone_number: params[:phone_number],
       email: params[:email],
-      bio: params[:bio]
+      bio: params[:bio],
+      user_id: current_user.id
       )
     if contact.save
       render json: contact.as_json
