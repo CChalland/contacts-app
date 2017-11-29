@@ -1,6 +1,8 @@
 require "unirest"
 require "pp"
 
+params = {}
+
 while true
   system "clear"
   puts "Welcome to your contact list! Select an option:"
@@ -24,7 +26,7 @@ while true
   input_answer = gets.chomp
 
   if input_answer == "1"
-    response = Unirest.get("http://localhost:3000/contacts?user_id=#{params[:user_id]}")
+    response = Unirest.get("http://localhost:3000/contacts")
     contacts = response.body
     pp contacts
 
@@ -66,8 +68,9 @@ while true
     pp contacts
 
   elsif input_answer == "2"
-    params = {}
+    user_response = Unirest.get("http://localhost:3000/users/#{params[:id]}")
     puts "Enter the following infomation for the contact"
+    params[:user_id] = user_response.id
     puts "Enter the contact's first name:"
     params[:first_name] = gets.chomp
     print "Enter the contact's middle name: "
@@ -94,7 +97,7 @@ while true
   elsif input_answer == "4"
     puts "Enter the contact ID#:"
     input_id = gets.chomp
-    params = {}
+    
     puts "Change the following infomation"
     print "Enter the new contact's first name: "
     params[:first_name] = gets.chomp
@@ -119,7 +122,7 @@ while true
     pp response.body
 
   elsif input_answer == "signup"
-    params = {}
+    
     print "Name: "
     params[:name] = gets.chomp
     print "Email: "
@@ -136,7 +139,7 @@ while true
 
   elsif input_answer == "login"
     puts "Login to the app"
-    params = {}
+    
     print "Email: "
     params[:email] = gets.chomp
     print "Password: "

@@ -1,11 +1,12 @@
 class ContactsController < ApplicationController
+  before_action :authenticate_user
+
   def index
     contacts = Contact.all 
     if params[:search_first_name]
       contacts = contacts.where("first_name ILIKE ?", "%#{params[:search_first_name]}%")
 
     elsif params[:search_last_name]
-      params[:search_last_name]
       contacts = contacts.where("last_name ILIKE ?", "%#{params[:search_last_name]}%")
       
     elsif params[:search_middle_name]
@@ -17,10 +18,10 @@ class ContactsController < ApplicationController
     elsif params[:search_email]
       contacts = contacts.where("email ILIKE ?", "%#{params[:search_email]}%")
 
-    elsif params[:user_id]
-      contacts = contacts.where("user_id = ?", params[:user_id]) 
+    elsif current_user
+      contacts = current_user.contacts
     end
-    render json: contacts.as_json
+      render json: contacts.as_json
   end
 
   def create
